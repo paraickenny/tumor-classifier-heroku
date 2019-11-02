@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Tumor Classifier query page</title>
+</head>
+<body>
+<p><h1> A machine learning algorithm for estimating the probability that a given mutation profile corresponds to a particular tumor type</h1></p>
+<p></p>
+
+	RESEARCH USE ONLY<br><br>
+	<form action="https://tumor-classifier.herokuapp.com/evaluate?" method="get">
+	  <label for="textfield">Enter Genes:</label>
+      <input name="query" type="text" id="query" size="100">
+        <p></p>
+
+
+	  <input type="submit" name="submit" id="submit" value="Submit">
+        <p></p>
+	</form>
+<p>1. Enter comma-delimited list of capitalized genes reported as mutant in a clinical cancer sequencing report.<br>
+e.g. (EGFR, KRAS, TP53)<br>
+	2. Click submit and wait patiently(!). It takes around 30 seconds to build the classifiers and report the results. </p>
+<p> Code by Paraic Kenny PhD, Gundersen Medical Foundation, La Crosse WI.<br>
+Feedback welcome at pakenny@gundersenhealth.org</p>
+</body>
+</html>

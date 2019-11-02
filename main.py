@@ -96,20 +96,21 @@ def tumor_classifier():
     #input = raw_input("Enter comma-delimited list of reported mutant genes: ")
     #unformatted_input = list(input.split(","))
 
-    inputgenes = ["EGFR", "KRAS"]
+    #inputgenes = ["EGFR", "KRAS"]
     query = request.args.get('query')          # takes the query argument passed in http query to app (gene names)
     query = query.encode('ascii','ignore')    # change imported text from unicode to ascii
-    inputgenes = list(query.split(","))
-    #inputgenes = map(str.strip, inputgenes)  # removes spaces from elements in list
-    #inputgenes = map(str.upper, inputgenes)  # convert all elements of string to upper case
+    unformatted_input = list(query.split(","))
+    inputgenes = map(str.strip, inputgenes)  # removes spaces from elements in list
+    inputgenes = map(str.upper, inputgenes)  # convert all elements of string to upper case
 
-    """
+
     for e in unformatted_input:     # converts any entries to upper case, removes spaces etc.
         e = e.upper()
         e = e.strip()
+        e = ''.join(e.split())
         inputgenes.append(e)
     
-    """
+
     for a in inputgenes:
         if a not in genes:
             weboutput += str("<p>" + a + " not found.")  # exits program if user enters a gene not in the list

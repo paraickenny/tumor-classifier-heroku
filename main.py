@@ -42,7 +42,7 @@ sample represents each tumor type. This table is rank ordered by the average pro
 classifiers.
 """
 
-from flask import Flask, request
+from flask import Flask, request, Response
 #app = Flask(__name__)
 app = Flask(__name__, static_url_path='')
 
@@ -51,6 +51,7 @@ def root():
     return app.send_static_file('index.html')
 
 @app.route("/evaluate")
+
 
 def tumor_classifier():
     # from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
@@ -61,6 +62,7 @@ def tumor_classifier():
     from sklearn.model_selection import train_test_split
     from sklearn.linear_model import LogisticRegression
     from sklearn.multiclass import OneVsRestClassifier
+    from sklearn.externals import joblib
 
     import pandas as pd
     from sklearn.metrics import classification_report
@@ -142,7 +144,11 @@ def tumor_classifier():
     # the number of points the classifier will look at to determine what class a new point belongs to
     KNN_model = KNeighborsClassifier(n_neighbors=5)
     KNN_model.fit(X_train, y_train)
+
+    #KNN_model = joblib.load('KNN_classifier.plk')
+
     KNN_prediction = KNN_model.predict(X_test)
+
 
     """
     # Accuracy score is the simplest way to evaluate
@@ -156,11 +162,11 @@ def tumor_classifier():
     # Create a dictionary called summary, in which to accumulate probability calls for each classifier
     summary = {}
 
-    print "KNN prediction of identity of unknown"
+    #print "KNN prediction of identity of unknown"
     KNN_top = KNN_model.predict(unknown)
-    print KNN_top
+    #print KNN_top
     KNN_list = list(zip(KNN_model.classes_, KNN_model.predict_proba(unknown)[0]))
-    print KNN_list
+    #print KNN_list
     # print (classification_report(answer, y_test))
 
     for i in KNN_list:      # add probabilities to cumulative summary
@@ -169,15 +175,18 @@ def tumor_classifier():
         vals.append(b)
         summary[a] = vals
 
-    print "Model: decision tree..."
+
+    #print "Model: decision tree..."
     clf = DecisionTreeClassifier()
-    clf.fit(X_train, y_train)
+    clf = joblib.load("decision_tree_classifier.plk")
+
+    #clf.fit(X_train, y_train)
     prob = clf.predict_proba(unknown)
     dt_top = clf.predict(unknown)
-    print dt_top
-    print (prob)
+    #print dt_top
+    # print (prob)
     dt_list = list(zip(clf.classes_, clf.predict_proba(unknown)[0]))
-    print "Decision tree results: ", dt_list
+    #print "Decision tree results: ", dt_list
 
     for i in dt_list:
         a, b = i
@@ -187,17 +196,20 @@ def tumor_classifier():
 
     # print "Cumulative summary:", summary
 
-    print "Model: skmultilearn"
+    #print "Model: skmultilearn"
 
 
     clf = OneVsRestClassifier(DecisionTreeClassifier())
-    clf.fit(X_train, y_train)
+
+    #clf.fit(X_train, y_train)
+    clf = joblib.load("skmulti_classifier.plk")
+
     prob = clf.predict_proba(unknown)
     skmulti_top = clf.predict(unknown)
-    print skmulti_top
+    #print skmulti_top
     # print (prob)
     skmulti_list = list(zip(clf.classes_, clf.predict_proba(unknown)[0]))
-    print skmulti_list
+    #print skmulti_list
 
     for i in skmulti_list:
         a, b = i
@@ -205,17 +217,19 @@ def tumor_classifier():
             if k == a:
                 v.append(b)
 
-    print "Cumulative summary:", summary
+    #print "Cumulative summary:", summary
 
     logreg_clf = LogisticRegression()
 
-    logreg_clf.fit(X_train, y_train)
+    #logreg_clf.fit(X_train, y_train)
+    logreg_clf = joblib.load("logreg_classifier.plk")
+
     logreg_top = logreg_clf.predict(unknown)
     prob = logreg_clf.predict_proba(unknown)
-    print "logistic regression"
-    print logreg_top
+    #print "logistic regression"
+    #print logreg_top
     logreg_list = list(zip(logreg_clf.classes_, logreg_clf.predict_proba(unknown)[0]))
-    print logreg_list
+    #print logreg_list
 
     for i in logreg_list:
         a, b = i
@@ -223,16 +237,18 @@ def tumor_classifier():
             if k == a:
                 v.append(b)
 
-    print "SVM linear SVC"
+    #print "SVM linear SVC"
     svm = LinearSVC()
-    clf = CalibratedClassifierCV(svm)
+    #clf = CalibratedClassifierCV(svm)
+    clf = joblib.load("SVM_classifer.plk")
+
     clf.fit(X_train, y_train)
     y_proba = clf.predict_proba(unknown)
     SVM_Linear_top = clf.predict(unknown)
 
-    print SVM_Linear_top
+    #print SVM_Linear_top
     SVM_Linear_list = list(zip(clf.classes_, clf.predict_proba(unknown)[0]))
-    print SVM_Linear_list
+    #print SVM_Linear_list
 
     for i in SVM_Linear_list:
         a, b = i
@@ -267,7 +283,7 @@ def tumor_classifier():
     # output tuples is a list of tuples in which the first element is the tissue type and the second element is average probabilty
     output_tuples = sorted(average_probabilities.items(), key=lambda x: x[1], reverse=True)
 
-    print output_tuples
+    #print output_tuples
 
     # for i in output_tuples:
     #    print i
@@ -282,9 +298,9 @@ def tumor_classifier():
     weboutput += str("<br>Logistic regression top prediction: " + "\t"*2 + str(logreg_top))
     weboutput += str("<br>Support Vector Machine Linear top prediction: " +"\t"*1 + str(SVM_Linear_top))
     weboutput += "<p>----------------------------------------------------------"
-    print
+    #print
     weboutput += "<p>Rank ordered list, by average probability: (KNN, Decision Tree, Multi-Label Classification, Logistic regression, Support Vector Machine):</p>"
-    print
+    #print
     for i in output_tuples:
         a, b = i
         for k, v in summary.items():
@@ -302,6 +318,9 @@ def tumor_classifier():
 
 
     return weboutput
+
+
+
 
 if __name__ == "__main__":
     app.run()

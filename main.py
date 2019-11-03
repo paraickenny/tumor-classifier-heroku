@@ -92,7 +92,7 @@ def tumor_classifier():
     inputgenes = []
     # inputgenes = ["APC", "KRAS"]
     genes = list(data.columns.values)[2:]       # gets the list of genes from input file
-    print "Available Genes:", genes
+    #print "Available Genes:", genes
 
 
     #input = raw_input("Enter comma-delimited list of reported mutant genes: ")
@@ -147,7 +147,7 @@ def tumor_classifier():
 
     #KNN_model = joblib.load('KNN_classifier.plk')
 
-    KNN_prediction = KNN_model.predict(X_test)
+    #KNN_prediction = KNN_model.predict(X_test)
 
 
     """
@@ -181,7 +181,7 @@ def tumor_classifier():
     #clf = joblib.load("decision_tree_classifier.plk")
 
     clf.fit(X_train, y_train)
-    prob = clf.predict_proba(unknown)
+    #prob = clf.predict_proba(unknown)
     dt_top = clf.predict(unknown)
     #print dt_top
     # print (prob)
@@ -204,7 +204,7 @@ def tumor_classifier():
     clf.fit(X_train, y_train)
     #clf = joblib.load("skmulti_classifier.plk")
 
-    prob = clf.predict_proba(unknown)
+    #prob = clf.predict_proba(unknown)
     skmulti_top = clf.predict(unknown)
     #print skmulti_top
     # print (prob)
@@ -225,7 +225,7 @@ def tumor_classifier():
     #logreg_clf = joblib.load("logreg_classifier.plk")
 
     logreg_top = logreg_clf.predict(unknown)
-    prob = logreg_clf.predict_proba(unknown)
+    #prob = logreg_clf.predict_proba(unknown)
     #print "logistic regression"
     #print logreg_top
     logreg_list = list(zip(logreg_clf.classes_, logreg_clf.predict_proba(unknown)[0]))
@@ -243,7 +243,7 @@ def tumor_classifier():
     #clf = joblib.load("SVM_classifer.plk")
 
     clf.fit(X_train, y_train)
-    y_proba = clf.predict_proba(unknown)
+    #y_proba = clf.predict_proba(unknown)
     SVM_Linear_top = clf.predict(unknown)
 
     #print SVM_Linear_top

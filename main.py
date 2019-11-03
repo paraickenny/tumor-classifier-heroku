@@ -178,9 +178,9 @@ def tumor_classifier():
 
     #print "Model: decision tree..."
     clf = DecisionTreeClassifier()
-    clf = joblib.load("decision_tree_classifier.plk")
+    #clf = joblib.load("decision_tree_classifier.plk")
 
-    #clf.fit(X_train, y_train)
+    clf.fit(X_train, y_train)
     prob = clf.predict_proba(unknown)
     dt_top = clf.predict(unknown)
     #print dt_top
@@ -201,8 +201,8 @@ def tumor_classifier():
 
     clf = OneVsRestClassifier(DecisionTreeClassifier())
 
-    #clf.fit(X_train, y_train)
-    clf = joblib.load("skmulti_classifier.plk")
+    clf.fit(X_train, y_train)
+    #clf = joblib.load("skmulti_classifier.plk")
 
     prob = clf.predict_proba(unknown)
     skmulti_top = clf.predict(unknown)
@@ -221,8 +221,8 @@ def tumor_classifier():
 
     logreg_clf = LogisticRegression()
 
-    #logreg_clf.fit(X_train, y_train)
-    logreg_clf = joblib.load("logreg_classifier.plk")
+    logreg_clf.fit(X_train, y_train)
+    #logreg_clf = joblib.load("logreg_classifier.plk")
 
     logreg_top = logreg_clf.predict(unknown)
     prob = logreg_clf.predict_proba(unknown)
@@ -239,8 +239,8 @@ def tumor_classifier():
 
     #print "SVM linear SVC"
     svm = LinearSVC()
-    #clf = CalibratedClassifierCV(svm)
-    clf = joblib.load("SVM_classifer.plk")
+    clf = CalibratedClassifierCV(svm)
+    #clf = joblib.load("SVM_classifer.plk")
 
     clf.fit(X_train, y_train)
     y_proba = clf.predict_proba(unknown)

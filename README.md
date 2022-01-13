@@ -13,4 +13,4 @@ each of the five classifiers. Then follows a table showing the probability estim
 sample represents each tumor type. This table is rank ordered by the average probability computed by each of the five
 classifiers.
 
-This version adapted to run on Heroku platform.
+This version adapted to run on Heroku platform. A working version is at https://tumor-classifier.herokuapp.com/
